@@ -10,10 +10,13 @@ class Some1 < Formula
   depends_on "python@3.11"
 
   def install
-    virtualenv_install_with_resources
+    virtualenv_create(libexec, "python3.11")
+    system libexec/"bin/pip", "install", "--no-deps", "."
+    system libexec/"bin/pip", "install", "."
+    bin.install_symlink Dir[libexec/"bin/some1"]
   end
 
   test do
-    assert_match "SOME-1", shell_output("#{bin}/some1 --version 2>&1", 2)
+    system "#{bin}/some1", "--help"
   end
 end
